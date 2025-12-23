@@ -5,6 +5,5 @@
   "minAppVersion": "1.0.0",
   "description": "Track habits using a competitive rank system with RR, decay penalties, and progress analysis.",
   "author": "Baldev8910",
-  "isDesktopOnly": true,
-  "main": "main.js"
+  "isDesktopOnly": true
 }
