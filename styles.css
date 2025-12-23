@@ -1,0 +1,38 @@
+/* Rank Analysis Table */
+.rank-analysis {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 12px;
+}
+
+.rank-analysis th {
+  text-align: left;
+  font-size: 0.8em;
+  opacity: 0.7;
+  border-bottom: 1px solid var(--background-modifier-border);
+  padding: 6px;
+}
+
+.rank-analysis td {
+  padding: 6px;
+}
+
+/* Heatmap */
+.rank-heatmap {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(10px, 1fr));
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.rank-heatmap div {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+}
+
+.rank-heatmap .h1 { background: rgba(34,197,94,0.25); }
+.rank-heatmap .h2 { background: rgba(34,197,94,0.45); }
+.rank-heatmap .h3 { background: rgba(34,197,94,0.65); }
+.rank-heatmap .h4 { background: rgba(34,197,94,0.85); }

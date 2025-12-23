@@ -1,0 +1,120 @@
+{
+  "enabledActivities": {
+    "Journal": true,
+    "Workout": true,
+    "Medicine": true,
+    "Water Plants": true,
+    "Gaming": true,
+    "Research": true,
+    "Study": true,
+    "GTG": true,
+    "No Fap": true,
+    "Reading": true,
+    "Cardio": true,
+    "Python": true,
+    "Guitar": true
+  },
+  "customHabits": [
+    {
+      "id": "f4b4f3c1-3889-4db3-aaf0-6da2f7baa8d4",
+      "name": "AcaResearch",
+      "folder": "01 Daily Journal",
+      "field": "AcaResearch",
+      "rrPerDay": 1,
+      "penaltyPerDay": 2,
+      "enabled": true
+    }
+  ],
+  "rankGraceRR": 20,
+  "rankGraceDays": 3,
+  "rankBelowSince": null,
+  "activitySnapshots": {
+    "f4b4f3c1-3889-4db3-aaf0-6da2f7baa8d4": {
+      "activityId": "f4b4f3c1-3889-4db3-aaf0-6da2f7baa8d4",
+      "disabledDate": "2025-12-18",
+      "frozenRR": 1,
+      "frozenStreak": 1
+    }
+  },
+  "snapshots": [
+    {
+      "timestamp": "2025-12-20T12:10:20.888Z",
+      "totalRR": 636,
+      "liveRR": 105,
+      "historicalRR": 531,
+      "rank": "Platinum I",
+      "perActivity": [
+        {
+          "name": "Journal",
+          "rr": 38,
+          "streak": 38
+        },
+        {
+          "name": "Workout",
+          "rr": 5,
+          "streak": 5
+        },
+        {
+          "name": "Guitar",
+          "rr": 5,
+          "streak": 5
+        },
+        {
+          "name": "Python",
+          "rr": 4,
+          "streak": 4
+        },
+        {
+          "name": "Cardio",
+          "rr": 1,
+          "streak": 1
+        },
+        {
+          "name": "Reading",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "No Fap",
+          "rr": 10,
+          "streak": 2
+        },
+        {
+          "name": "GTG",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "Study",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "Research",
+          "rr": 4,
+          "streak": 4
+        },
+        {
+          "name": "Gaming",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "Water Plants",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "Medicine",
+          "rr": 6,
+          "streak": 6
+        },
+        {
+          "name": "AcaResearch",
+          "rr": 2,
+          "streak": 2
+        }
+      ]
+    }
+  ]
+}
