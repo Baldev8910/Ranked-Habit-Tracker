@@ -521,7 +521,6 @@ A: Live RR comes from your current active streaks (can decay with penalties). Hi
 
 - Weekly tracking mode (in addition to daily)
 - Rank demotion grace period (3 days + 20 RR buffer)
-- Activity snapshot system (frozen RR for disabled habits)
 - Demotion floor (prevents rank freefall)
 - Custom habits with unlimited configuration
 - Rank analysis reports with heatmaps
