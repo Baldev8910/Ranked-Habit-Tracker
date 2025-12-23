@@ -354,9 +354,9 @@ const DEFAULT_SETTINGS: ValorantRankSettings = {
 | --------- | ------------- |
 | Open Valorant Rank Dashboard | Opens main rank view |
 | Capture Rank Snapshot | Saves current state |
-| Open Rank Stats | Views snapshot history |
-| Generate Rank Analysis (Last 30 Days) | Creates 30-day report |
-| Generate Rank Analysis | Creates custom report |
+| Open Rank Stats (BETA) | Views snapshot history |
+| Generate Rank Analysis (Last 30 Days) (BETA) | Creates 30-day report |
+| Generate Rank Analysis (BETA) | Creates custom report |
 
 ---
 
