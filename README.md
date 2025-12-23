@@ -10,7 +10,8 @@ This plugin can help you build habit for over a long term and keep you competiti
 
 ## How to Use?
 
-![Rank](assets/preview.png)
+![Rank display showing current tier and progress, featuring a rank icon on the left with the tier name displayed alongside a progress bar indicating RR points toward the next rank threshold](assets/preview.png)
+![Settings panel with date 2025-12-23 at top, Properties section listing 13 default habit checkboxes (DJournal, Masturbation Avoidance checked, GTG, Study, Research, Gaming, waterPlants, Medicine, AcaResearch unchecked), and Add property option at bottom](assets/preview_2.png)
 
 You will need to set your habits in the properties in checkbox style. Numerical and alphabetical values will not work. Might add in the next update.
 
