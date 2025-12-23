@@ -523,9 +523,6 @@ A: Live RR comes from your current active streaks (can decay with penalties). Hi
 - Rank demotion grace period (3 days + 20 RR buffer)
 - Demotion floor (prevents rank freefall)
 - Custom habits with unlimited configuration
-- Rank analysis reports with heatmaps
-- Rank snapshot history tracking
-- Live RR vs Historical RR breakdown
 - Real-time dashboard updates
 
 ---
