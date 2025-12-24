@@ -12,7 +12,7 @@ import {
 } from "obsidian";
 
 
-const VIEW_TYPE_RANK = "valorant-rank-view";
+const VIEW_TYPE_RANK = "Track-rank-view";
 
 /* ======================
    ENGINE (INLINE)
@@ -60,7 +60,7 @@ interface ActivityConfig {
   rrPerWeek?: number; // ADD THIS
 }
 
-interface ValorantRankSettings {
+interface TrackRankSettings {
   enabledActivities: Record<string, boolean>;
   customHabits: CustomHabitConfig[];
 
@@ -86,7 +86,7 @@ interface RankSnapshot {
   }[];
 }
 
-const DEFAULT_SETTINGS: ValorantRankSettings = {
+const DEFAULT_SETTINGS: TrackRankSettings = {
   enabledActivities: {},
   customHabits: [],
   rankGraceRR: 20,
@@ -222,7 +222,6 @@ function calculateWeeklyStreak(
 
   // Check current week
   const currentWeek = getWeek(today);
-  const currentWeekKey = `${currentWeek.year}-W${currentWeek.week}`;
   
   // Calculate streak (consecutive weeks)
   let streak = 0;
@@ -375,7 +374,7 @@ async function generateRankAnalysisNote(
     );
   });
 
-lines.push(`</div>`);
+  lines.push(`</div>`);
 
   const content = lines.join("\n");
 
@@ -386,22 +385,22 @@ lines.push(`</div>`);
 
   const filename = `${folder}/Rank Analysis ${end.toISOString().slice(0, 10)}.md`;
 
-  // Check if file exists
+  // Check if file exist
   let file = app.vault.getAbstractFileByPath(filename);
 
   if (file instanceof TFile) {
     // File exists, modify it
     await app.vault.modify(file, content);
+    // Open the existing file
+    await app.workspace.getLeaf(true).openFile(file);
   } else {
     // File doesn't exist, create it
-    file = await app.vault.create(filename, content);
-  }
+    const newFile = await app.vault.create(filename, content);
+    // Open the new file
+    await app.workspace.getLeaf(true).openFile(newFile);
+  }}
 
-  // Open the file
-  await app.workspace.getLeaf(true).openFile(file as TFile);
-}
-
-const VIEW_TYPE_STATS = "valorant-rank-stats";
+const VIEW_TYPE_STATS = "Track-rank-stats";
 
 const ACTIVITIES: ActivityConfig[] = [
   {
@@ -501,7 +500,7 @@ const ACTIVITIES: ActivityConfig[] = [
 
 function computeAllActivityRR(
   app: App,
-  settings: ValorantRankSettings
+  settings: TrackRankSettings
 ) {
   let historicalRR = 0;
   let liveRR = 0;
@@ -530,7 +529,6 @@ function computeAllActivityRR(
 
   // LOOP THROUGH EACH ACTIVITY
   for (const activity of allActivities) {
-    const activityId = 'id' in activity ? activity.id : activity.name;
     const completions = getCompletionsFromFolder(
       app,
       activity.folder,
@@ -773,7 +771,7 @@ function resolveRankRaw(totalRR: number) {
 
 function resolveRankWithGrace(
   totalRR: number,
-  settings: ValorantRankSettings
+  settings: TrackRankSettings
 ) {
   const raw = resolveRankRaw(totalRR);
 
@@ -833,7 +831,7 @@ function resolveRankWithGrace(
 
 function buildSnapshot(
   app: App,
-  settings: ValorantRankSettings
+  settings: TrackRankSettings
 ) {
   const { totalRR, breakdown } = computeAllActivityRR(app, settings);
 
@@ -857,10 +855,10 @@ function buildSnapshot(
   };
 }
 
-class ValorantRankView extends ItemView {
-  plugin: ValorantHabitRankPlugin;
+class TrackRankView extends ItemView {
+  plugin: TrackHabitRankPlugin;
 
-  constructor(leaf: WorkspaceLeaf, plugin: ValorantHabitRankPlugin) {
+  constructor(leaf: WorkspaceLeaf, plugin: TrackHabitRankPlugin) {
     super(leaf);
     this.plugin = plugin;
   }
@@ -870,11 +868,11 @@ class ValorantRankView extends ItemView {
   }
 
   getDisplayText(): string {
-    return "Valorant Rank";
+    return "Track rank";
   }
 
   async onOpen() {
-    this.render();
+    await this.render();
   }
 
   render() {
@@ -910,7 +908,7 @@ class ValorantRankView extends ItemView {
     });
 
     wrapper.createEl("div", {
-      text: "COMPETITIVE RANK",
+      text: "Competitive rank",
       attr: {
         style: `
           font-size: 0.75em;
@@ -961,7 +959,7 @@ class ValorantRankView extends ItemView {
 
     if (rankInfo.demotionWarning?.inGrace) {
       wrapper.createEl("div", {
-        text: "⬇ Rank under pressure",
+        text: "Rank under pressure",
         attr: {
           style: `
             margin-bottom: 10px;
@@ -1049,7 +1047,7 @@ class ValorantRankView extends ItemView {
       });
 
       box.createEl("div", {
-        text: "⚠ Penalties Active",
+        text: "Penalties active",
         attr: {
           style: `
             font-weight: 600;
@@ -1075,10 +1073,10 @@ class ValorantRankView extends ItemView {
   }
 }
 
-class ValorantRankSettingTab extends PluginSettingTab {
-  plugin: ValorantHabitRankPlugin;
+class TrackRankSettingTab extends PluginSettingTab {
+  plugin: TrackHabitRankPlugin;
 
-  constructor(app: App, plugin: ValorantHabitRankPlugin) {
+  constructor(app: App, plugin: TrackHabitRankPlugin) {
     super(app, plugin);
     this.plugin = plugin;
   }
@@ -1091,9 +1089,9 @@ class ValorantRankSettingTab extends PluginSettingTab {
        DEFAULT ACTIVITIES
     ====================== */
 
-    containerEl.createEl("h2", {
-      text: "Valorant Rank Settings"
-    });
+    new Setting(containerEl)
+      .setName("Track rank settings")
+      .setHeading();
 
     ACTIVITIES.forEach(activity => {
       new Setting(containerEl)
@@ -1178,21 +1176,21 @@ class ValorantRankSettingTab extends PluginSettingTab {
        CUSTOM HABITS
     ====================== */
 
-    containerEl.createEl("h3", {
-      text: "Custom Habits"
-    });
+    new Setting(containerEl)
+      .setName("Custom habits")
+      .setHeading();
 
     new Setting(containerEl)
-      .setName("Add Custom Habit")
+      .setName("Add custom habit")
       .setDesc("Track any checkbox-based habit")
       .addButton(btn =>
         btn
-          .setButtonText("Add Habit")
+          .setButtonText("Add habit")
           .setCta()
           .onClick(async () => {
             this.plugin.settings.customHabits.push({
               id: crypto.randomUUID(),
-              name: "New Habit",
+              name: "New habit",
               folder: "",
               field: "",
               rrPerDay: 1,
@@ -1201,7 +1199,7 @@ class ValorantRankSettingTab extends PluginSettingTab {
             });
 
             await this.plugin.saveSettings();
-            this.display(); // re-render settings
+            await this.display(); // re-render settings
           })
       );
 
@@ -1308,10 +1306,10 @@ class ValorantRankSettingTab extends PluginSettingTab {
         // Folder
         new Setting(box)
           .setName("Folder")
-          .setDesc("Folder containing YYYY-MM-DD notes")
+          .setDesc("Folder containing 'YYYY-MM-DD' notes")
           .addText(t =>
             t
-              .setPlaceholder("01 Daily Journal")
+              .setPlaceholder("'01 Daily Journal'")
               .setValue(habit.folder)
               .onChange(async v => {
                 habit.folder = v;
@@ -1335,7 +1333,7 @@ class ValorantRankSettingTab extends PluginSettingTab {
 
         // RR per day
         new Setting(box)
-          .setName("RR per Day")
+          .setName("RR per day")
           .addText(t =>
             t
               .setValue(String(habit.rrPerDay))
@@ -1348,7 +1346,7 @@ class ValorantRankSettingTab extends PluginSettingTab {
 
         // Penalty per day
         new Setting(box)
-          .setName("Penalty per Day")
+          .setName("Penalty per day")
           .addText(t =>
             t
               .setValue(String(habit.penaltyPerDay))
@@ -1374,8 +1372,8 @@ class ValorantRankSettingTab extends PluginSettingTab {
           );
 
         new Setting(box)
-          .setName("Tracking Mode")
-          .setDesc("Daily = consecutive days, Weekly = 1+ per week")
+          .setName("Tracking mode")
+          .setDesc("Daily = consecutive days, weekly = 1+ per week")
           .addDropdown(d =>
             d
               .addOption('daily', 'Daily')
@@ -1390,7 +1388,7 @@ class ValorantRankSettingTab extends PluginSettingTab {
 
         if (habit.trackingMode === 'weekly') {
         new Setting(box)
-          .setName("RR per Week")
+          .setName("RR per week")
           .addText(t =>
             t
               .setValue(String(habit.rrPerWeek || 7))
@@ -1405,40 +1403,41 @@ class ValorantRankSettingTab extends PluginSettingTab {
   }
 }
 
-class ValorantStatsView extends ItemView {
-  plugin: ValorantHabitRankPlugin;
-
-  constructor(leaf: WorkspaceLeaf, plugin: ValorantHabitRankPlugin) {
+class TrackStatsView extends ItemView {
+  plugin: TrackHabitRankPlugin;
+  
+  constructor(leaf: WorkspaceLeaf, plugin: TrackHabitRankPlugin) {
     super(leaf);
     this.plugin = plugin;
   }
-
+  
   getViewType() { return VIEW_TYPE_STATS; }
-  getDisplayText() { return "Rank Stats"; }
-
+  getDisplayText() { return "Rank stats"; }
+  
   async onOpen() {
-    this.render();
+    await this.render();
   }
-
+  
   render() {
     const el = this.contentEl;
     el.empty();
-
     const snapshots = this.plugin.settings.snapshots ?? [];
-
-    el.createEl("h3", { text: "Rank Snapshots" });
-
+    
+    new Setting(el)
+      .setName("Rank snapshots")
+      .setHeading();
+    
     if (snapshots.length === 0) {
       el.createEl("div", { text: "No snapshots yet." });
       return;
     }
-
+    
     const table = el.createEl("table");
     const head = table.createEl("tr");
     ["Time", "Rank", "Total RR"].forEach(h =>
       head.createEl("th", { text: h })
     );
-
+    
     snapshots.slice().reverse().forEach(s => {
       const row = table.createEl("tr");
       row.createEl("td", { text: new Date(s.timestamp).toLocaleString() });
@@ -1458,7 +1457,13 @@ class RangeSelectModal extends Modal {
 
   onOpen() {
     const { contentEl } = this;
-    contentEl.createEl("h3", { text: "Generate Rank Analysis" });
+    new Setting(contentEl)
+      .setName("Generate rank analysis")
+      .setHeading();
+
+    contentEl.createEl("button", {
+      text: "Generate",
+    })
 
     const input = contentEl.createEl("input", {
       type: "number",
@@ -1484,8 +1489,8 @@ class RangeSelectModal extends Modal {
    PLUGIN
 ====================== */
 
-export default class ValorantHabitRankPlugin extends Plugin {
-  settings!: ValorantRankSettings;
+export default class TrackHabitRankPlugin extends Plugin {
+  settings!: TrackRankSettings;
 
   async onload() {
     this.settings = Object.assign(
@@ -1494,16 +1499,14 @@ export default class ValorantHabitRankPlugin extends Plugin {
       await this.loadData()
     );
 
-    this.addStyles();
-
     this.registerView(
       VIEW_TYPE_RANK,
-      (leaf) => new ValorantRankView(leaf, this)
+      (leaf) => new TrackRankView(leaf, this)
     );
 
     this.registerView(
       VIEW_TYPE_STATS,
-      leaf => new ValorantStatsView(leaf, this)
+      leaf => new TrackStatsView(leaf, this)
     );
 
     const refresh = debounce(async () => {
@@ -1516,14 +1519,14 @@ export default class ValorantHabitRankPlugin extends Plugin {
     );
 
     this.addCommand({
-      id: "open-valorant-rank",
-      name: "Open Valorant Rank Dashboard",
+      id: "open-Track-rank",
+      name: "Open rank dashboard",
       callback: () => this.activateView()
     });
 
     this.addCommand({
       id: "capture-rank-snapshot",
-      name: "Capture Rank Snapshot",
+      name: "Capture rank snapshot",
       callback: async () => {
         const snapshot = buildSnapshot(this.app, this.settings);
         this.settings.snapshots.push(snapshot);
@@ -1534,102 +1537,60 @@ export default class ValorantHabitRankPlugin extends Plugin {
 
     this.addCommand({
       id: "open-rank-stats",
-      name: "Open Rank Stats",
+      name: "Open rank stats",
       callback: () => {
         const leaf = this.app.workspace.getRightLeaf(false);
-        leaf?.setViewState({ type: VIEW_TYPE_STATS, active: true });
+        if (leaf) {
+          void leaf.setViewState({ type: VIEW_TYPE_STATS, active: true });
+        }
       }
     });
 
     this.addCommand({
       id: "generate-rank-analysis-30d",
-      name: "Generate Rank Analysis (Last 30 Days)",
-      callback: () => generateRankAnalysisNote(this.app, 30)
+      name: "Generate rank analysis (last 30 days)",
+      callback: () => void generateRankAnalysisNote(this.app, 30)
     });
 
     this.addCommand({
       id: "generate-rank-analysis",
-      name: "Generate Rank Analysis",
+      name: "Generate rank analysis",
       callback: () => {
         new RangeSelectModal(this.app, (days) => {
-          generateRankAnalysisNote(this.app, days);
+          void generateRankAnalysisNote(this.app, days);
         }).open();
       }
     });
 
-    this.addSettingTab(new ValorantRankSettingTab(this.app, this));
+    this.addSettingTab(new TrackRankSettingTab(this.app, this));
   }
 
   async saveSettings() {
     await this.saveData(this.settings);
   }
 
-  addStyles() {
-    const styleEl = document.createElement('style');
-    styleEl.id = 'valorant-rank-analysis-styles';
-    styleEl.textContent = `
-      .rank-analysis {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      
-      .rank-analysis th,
-      .rank-analysis td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid var(--background-modifier-border);
-      }
-      
-      .rank-analysis th {
-        font-weight: 600;
-        background: var(--background-secondary);
-      }
-      
-      .rank-heatmap {
-        display: flex;
-        gap: 3px;
-        flex-wrap: wrap;
-      }
-      
-      .rank-heatmap > div {
-        width: 12px;
-        height: 12px;
-        border-radius: 2px;
-        background: var(--background-modifier-border);
-      }
-      
-      .rank-heatmap .h1 { background: rgba(34, 197, 94, 0.3); }
-      .rank-heatmap .h2 { background: rgba(34, 197, 94, 0.5); }
-      .rank-heatmap .h3 { background: rgba(34, 197, 94, 0.7); }
-      .rank-heatmap .h4 { background: rgba(34, 197, 94, 1); }
-    `;
-    document.head.appendChild(styleEl);
-  }
-
   async activateView() {
     const { workspace } = this.app;
     let leaf = workspace.getLeavesOfType(VIEW_TYPE_RANK)[0];
-
+    
     if (!leaf) {
       const rightLeaf = workspace.getRightLeaf(false);
       if (!rightLeaf) return;
       await rightLeaf.setViewState({ type: VIEW_TYPE_RANK, active: true });
       leaf = rightLeaf;
     }
-
-    workspace.revealLeaf(leaf);
+    
+    await workspace.revealLeaf(leaf);
   }
 
   refreshRankView() {
     const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_RANK);
     leaves.forEach(leaf => {
-      const view = leaf.view as ValorantRankView;
+      const view = leaf.view as TrackRankView;
       view.render();
     });
   }
 
   onunload() {
-  document.getElementById('valorant-rank-analysis-styles')?.remove();
 }
 }

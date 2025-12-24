@@ -36,3 +36,41 @@
 .rank-heatmap .h2 { background: rgba(34,197,94,0.45); }
 .rank-heatmap .h3 { background: rgba(34,197,94,0.65); }
 .rank-heatmap .h4 { background: rgba(34,197,94,0.85); }
+
+/* Rank Analysis Table */
+.rank-analysis {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.rank-analysis th,
+.rank-analysis td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.rank-analysis th {
+  font-weight: 600;
+  background: var(--background-secondary);
+}
+
+/* Heatmap */
+.rank-heatmap {
+  display: flex;
+  gap: 3px;
+  flex-wrap: wrap;
+}
+
+.rank-heatmap > div {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+  background: var(--background-modifier-border);
+}
+
+.rank-heatmap .h1 { background: rgba(34, 197, 94, 0.3); }
+.rank-heatmap .h2 { background: rgba(34, 197, 94, 0.5); }
+.rank-heatmap .h3 { background: rgba(34, 197, 94, 0.7); }
+.rank-heatmap .h4 { background: rgba(34, 197, 94, 1); }
