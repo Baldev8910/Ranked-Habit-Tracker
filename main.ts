@@ -1306,10 +1306,10 @@ class TrackRankSettingTab extends PluginSettingTab {
         // Folder
         new Setting(box)
           .setName("Folder")
-          .setDesc("Folder containing 'YYYY-MM-DD' notes") // This is required because it explains the format in which the notes are stored.
+          .setDesc("Folder containing 'YYYY-MM-DD' notes")
           .addText(t =>
             t
-              .setPlaceholder("'01 Daily Journal'") // This is the name of the folder and a suggestion for the user.
+              .setPlaceholder("'01 Daily Journal'") 
               .setValue(habit.folder)
               .onChange(async v => {
                 habit.folder = v;
@@ -1333,7 +1333,7 @@ class TrackRankSettingTab extends PluginSettingTab {
 
         // RR per day
         new Setting(box)
-          .setName("RR / day") // RR is an abbreviation for Rank Rating; it is necessary for it to be RR.
+          .setName("RR / day") 
           .addText(t =>
             t
               .setValue(String(habit.rrPerDay))
@@ -1388,7 +1388,7 @@ class TrackRankSettingTab extends PluginSettingTab {
 
         if (habit.trackingMode === 'weekly') {
         new Setting(box)
-          .setName("RR / week") // RR is an abbreviation for Rank Rating; it is necessary for it to be RR.
+          .setName("RR / week") 
           .addText(t =>
             t
               .setValue(String(habit.rrPerWeek || 7))
