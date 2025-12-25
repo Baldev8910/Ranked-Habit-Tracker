@@ -321,12 +321,12 @@ async function generateRankAnalysisNote(
 
   const lines: string[] = [];
 
-  lines.push(`# Rank Analysis — Last ${days} Days`);
+  lines.push(`# Rank analysis — last ${days} days`);
   lines.push(``);
   lines.push(`**Period:** ${start.toISOString().slice(0, 10)} → ${end.toISOString().slice(0, 10)}`);
   lines.push(``);
 
-  lines.push(`## Per-Activity Summary`);
+  lines.push(`## Per-activity summary`);
   lines.push(`<table class="rank-analysis">`);
   lines.push(`<tr><th>Activity</th><th>Days Done</th><th>Heat</th></tr>`);
 
@@ -355,7 +355,7 @@ async function generateRankAnalysisNote(
   lines.push(`</table>`);
   lines.push(``);
 
-  lines.push(`## Daily Activity Heatmap`);
+  lines.push(`## Daily activity heatmap`);
   lines.push(`<div class="rank-heatmap">`);
 
   // Sort dates chronologically for better visualization
@@ -378,12 +378,12 @@ async function generateRankAnalysisNote(
 
   const content = lines.join("\n");
 
-  const folder = "Data Analysis";
+  const folder = "Data analysis";
   if (!app.vault.getAbstractFileByPath(folder)) {
     await app.vault.createFolder(folder);
   }
 
-  const filename = `${folder}/Rank Analysis ${end.toISOString().slice(0, 10)}.md`;
+  const filename = `${folder}/Rank analysis ${end.toISOString().slice(0, 10)}.md`;
 
   // Check if file exist
   let file = app.vault.getAbstractFileByPath(filename);
@@ -871,8 +871,8 @@ class TrackRankView extends ItemView {
     return "Track rank";
   }
 
-  async onOpen() {
-    await this.render();
+  async onOpen(): Promise<void> {
+    this.render();
   }
 
   render() {
@@ -1090,7 +1090,7 @@ class TrackRankSettingTab extends PluginSettingTab {
     ====================== */
 
     new Setting(containerEl)
-      .setName("Track rank settings")
+      .setName("Track rank configuration")
       .setHeading();
 
     ACTIVITIES.forEach(activity => {
@@ -1199,7 +1199,7 @@ class TrackRankSettingTab extends PluginSettingTab {
             });
 
             await this.plugin.saveSettings();
-            await this.display(); // re-render settings
+            this.display();  // re-render settings
           })
       );
 
@@ -1333,7 +1333,7 @@ class TrackRankSettingTab extends PluginSettingTab {
 
         // RR per day
         new Setting(box)
-          .setName("RR per day")
+          .setName("RR / day")
           .addText(t =>
             t
               .setValue(String(habit.rrPerDay))
@@ -1388,7 +1388,7 @@ class TrackRankSettingTab extends PluginSettingTab {
 
         if (habit.trackingMode === 'weekly') {
         new Setting(box)
-          .setName("RR per week")
+          .setName("RR / week")
           .addText(t =>
             t
               .setValue(String(habit.rrPerWeek || 7))
@@ -1414,8 +1414,8 @@ class TrackStatsView extends ItemView {
   getViewType() { return VIEW_TYPE_STATS; }
   getDisplayText() { return "Rank stats"; }
   
-  async onOpen() {
-    await this.render();
+  async onOpen(): Promise<void> {
+    this.render();
   }
   
   render() {
