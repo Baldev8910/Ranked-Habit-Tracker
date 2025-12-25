@@ -873,6 +873,7 @@ class TrackRankView extends ItemView {
 
   async onOpen(): Promise<void> {
     this.render();
+    return Promise.resolve();
   }
 
   render() {
@@ -1416,6 +1417,7 @@ class TrackStatsView extends ItemView {
   
   async onOpen(): Promise<void> {
     this.render();
+    return Promise.resolve();
   }
   
   render() {
