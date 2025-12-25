@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const obsidian_1 = require("obsidian");
-const VIEW_TYPE_RANK = "valorant-rank-view";
+const VIEW_TYPE_RANK = "Track-rank-view";
 const DEFAULT_SETTINGS = {
     enabledActivities: {},
     customHabits: [],
@@ -109,7 +109,6 @@ function calculateWeeklyStreak(completions, rrPerWeek, asOf = new Date()) {
     });
     // Check current week
     const currentWeek = getWeek(today);
-    const currentWeekKey = `${currentWeek.year}-W${currentWeek.week}`;
     // Calculate streak (consecutive weeks)
     let streak = 0;
     let checkWeek = currentWeek;
@@ -227,20 +226,22 @@ async function generateRankAnalysisNote(app, days) {
         await app.vault.createFolder(folder);
     }
     const filename = `${folder}/Rank Analysis ${end.toISOString().slice(0, 10)}.md`;
-    // Check if file exists
+    // Check if file exist
     let file = app.vault.getAbstractFileByPath(filename);
     if (file instanceof obsidian_1.TFile) {
         // File exists, modify it
         await app.vault.modify(file, content);
+        // Open the existing file
+        await app.workspace.getLeaf(true).openFile(file);
     }
     else {
         // File doesn't exist, create it
-        file = await app.vault.create(filename, content);
+        const newFile = await app.vault.create(filename, content);
+        // Open the new file
+        await app.workspace.getLeaf(true).openFile(newFile);
     }
-    // Open the file
-    await app.workspace.getLeaf(true).openFile(file);
 }
-const VIEW_TYPE_STATS = "valorant-rank-stats";
+const VIEW_TYPE_STATS = "Track-rank-stats";
 const ACTIVITIES = [
     {
         name: "Journal",
@@ -356,7 +357,6 @@ function computeAllActivityRR(app, settings) {
     ];
     // LOOP THROUGH EACH ACTIVITY
     for (const activity of allActivities) {
-        const activityId = 'id' in activity ? activity.id : activity.name;
         const completions = getCompletionsFromFolder(app, activity.folder, activity.field);
         let result;
         if (completions.length === 0) {
@@ -599,7 +599,7 @@ function buildSnapshot(app, settings) {
         }))
     };
 }
-class ValorantRankView extends obsidian_1.ItemView {
+class TrackRankView extends obsidian_1.ItemView {
     constructor(leaf, plugin) {
         super(leaf);
         this.plugin = plugin;
@@ -608,10 +608,10 @@ class ValorantRankView extends obsidian_1.ItemView {
         return VIEW_TYPE_RANK;
     }
     getDisplayText() {
-        return "Valorant Rank";
+        return "Track rank";
     }
     async onOpen() {
-        this.render();
+        await this.render();
     }
     render() {
         const content = this.contentEl;
@@ -631,7 +631,7 @@ class ValorantRankView extends obsidian_1.ItemView {
             }
         });
         wrapper.createEl("div", {
-            text: "COMPETITIVE RANK",
+            text: "Competitive rank",
             attr: {
                 style: `
           font-size: 0.75em;
@@ -676,7 +676,7 @@ class ValorantRankView extends obsidian_1.ItemView {
         });
         if (rankInfo.demotionWarning?.inGrace) {
             wrapper.createEl("div", {
-                text: "⬇ Rank under pressure",
+                text: "Rank under pressure",
                 attr: {
                     style: `
             margin-bottom: 10px;
@@ -754,7 +754,7 @@ class ValorantRankView extends obsidian_1.ItemView {
                 }
             });
             box.createEl("div", {
-                text: "⚠ Penalties Active",
+                text: "Penalties active",
                 attr: {
                     style: `
             font-weight: 600;
@@ -778,7 +778,7 @@ class ValorantRankView extends obsidian_1.ItemView {
         }
     }
 }
-class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
+class TrackRankSettingTab extends obsidian_1.PluginSettingTab {
     constructor(app, plugin) {
         super(app, plugin);
         this.plugin = plugin;
@@ -789,9 +789,9 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
         /* ======================
            DEFAULT ACTIVITIES
         ====================== */
-        containerEl.createEl("h2", {
-            text: "Valorant Rank Settings"
-        });
+        new obsidian_1.Setting(containerEl)
+            .setName("Track rank settings")
+            .setHeading();
         ACTIVITIES.forEach(activity => {
             new obsidian_1.Setting(containerEl)
                 .setName(activity.name)
@@ -852,19 +852,19 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
         /* ======================
            CUSTOM HABITS
         ====================== */
-        containerEl.createEl("h3", {
-            text: "Custom Habits"
-        });
         new obsidian_1.Setting(containerEl)
-            .setName("Add Custom Habit")
+            .setName("Custom habits")
+            .setHeading();
+        new obsidian_1.Setting(containerEl)
+            .setName("Add custom habit")
             .setDesc("Track any checkbox-based habit")
             .addButton(btn => btn
-            .setButtonText("Add Habit")
+            .setButtonText("Add habit")
             .setCta()
             .onClick(async () => {
             this.plugin.settings.customHabits.push({
                 id: crypto.randomUUID(),
-                name: "New Habit",
+                name: "New habit",
                 folder: "",
                 field: "",
                 rrPerDay: 1,
@@ -872,7 +872,7 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
                 enabled: true
             });
             await this.plugin.saveSettings();
-            this.display(); // re-render settings
+            await this.display(); // re-render settings
         }));
         this.plugin.settings.customHabits.forEach((habit, index) => {
             const box = containerEl.createDiv({
@@ -953,9 +953,9 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
             // Folder
             new obsidian_1.Setting(box)
                 .setName("Folder")
-                .setDesc("Folder containing YYYY-MM-DD notes")
+                .setDesc("Folder containing 'YYYY-MM-DD' notes")
                 .addText(t => t
-                .setPlaceholder("01 Daily Journal")
+                .setPlaceholder("'01 Daily Journal'")
                 .setValue(habit.folder)
                 .onChange(async (v) => {
                 habit.folder = v;
@@ -974,7 +974,7 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
             }));
             // RR per day
             new obsidian_1.Setting(box)
-                .setName("RR per Day")
+                .setName("RR per day")
                 .addText(t => t
                 .setValue(String(habit.rrPerDay))
                 .onChange(async (v) => {
@@ -984,7 +984,7 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
             }));
             // Penalty per day
             new obsidian_1.Setting(box)
-                .setName("Penalty per Day")
+                .setName("Penalty per day")
                 .addText(t => t
                 .setValue(String(habit.penaltyPerDay))
                 .onChange(async (v) => {
@@ -1004,8 +1004,8 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
                 this.plugin.refreshRankView();
             }));
             new obsidian_1.Setting(box)
-                .setName("Tracking Mode")
-                .setDesc("Daily = consecutive days, Weekly = 1+ per week")
+                .setName("Tracking mode")
+                .setDesc("Daily = consecutive days, weekly = 1+ per week")
                 .addDropdown(d => d
                 .addOption('daily', 'Daily')
                 .addOption('weekly', 'Weekly')
@@ -1017,7 +1017,7 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
             }));
             if (habit.trackingMode === 'weekly') {
                 new obsidian_1.Setting(box)
-                    .setName("RR per Week")
+                    .setName("RR per week")
                     .addText(t => t
                     .setValue(String(habit.rrPerWeek || 7))
                     .onChange(async (v) => {
@@ -1029,21 +1029,23 @@ class ValorantRankSettingTab extends obsidian_1.PluginSettingTab {
         });
     }
 }
-class ValorantStatsView extends obsidian_1.ItemView {
+class TrackStatsView extends obsidian_1.ItemView {
     constructor(leaf, plugin) {
         super(leaf);
         this.plugin = plugin;
     }
     getViewType() { return VIEW_TYPE_STATS; }
-    getDisplayText() { return "Rank Stats"; }
+    getDisplayText() { return "Rank stats"; }
     async onOpen() {
-        this.render();
+        await this.render();
     }
     render() {
         const el = this.contentEl;
         el.empty();
         const snapshots = this.plugin.settings.snapshots ?? [];
-        el.createEl("h3", { text: "Rank Snapshots" });
+        new obsidian_1.Setting(el)
+            .setName("Rank snapshots")
+            .setHeading();
         if (snapshots.length === 0) {
             el.createEl("div", { text: "No snapshots yet." });
             return;
@@ -1066,7 +1068,12 @@ class RangeSelectModal extends obsidian_1.Modal {
     }
     onOpen() {
         const { contentEl } = this;
-        contentEl.createEl("h3", { text: "Generate Rank Analysis" });
+        new obsidian_1.Setting(contentEl)
+            .setName("Generate rank analysis")
+            .setHeading();
+        contentEl.createEl("button", {
+            text: "Generate",
+        });
         const input = contentEl.createEl("input", {
             type: "number",
             attr: {
@@ -1089,25 +1096,24 @@ class RangeSelectModal extends obsidian_1.Modal {
 /* ======================
    PLUGIN
 ====================== */
-class ValorantHabitRankPlugin extends obsidian_1.Plugin {
+class TrackHabitRankPlugin extends obsidian_1.Plugin {
     async onload() {
         this.settings = Object.assign({}, DEFAULT_SETTINGS, await this.loadData());
-        this.addStyles();
-        this.registerView(VIEW_TYPE_RANK, (leaf) => new ValorantRankView(leaf, this));
-        this.registerView(VIEW_TYPE_STATS, leaf => new ValorantStatsView(leaf, this));
+        this.registerView(VIEW_TYPE_RANK, (leaf) => new TrackRankView(leaf, this));
+        this.registerView(VIEW_TYPE_STATS, leaf => new TrackStatsView(leaf, this));
         const refresh = (0, obsidian_1.debounce)(async () => {
             await this.saveSettings();
             this.refreshRankView();
         }, 300);
         this.registerEvent(this.app.metadataCache.on("changed", refresh));
         this.addCommand({
-            id: "open-valorant-rank",
-            name: "Open Valorant Rank Dashboard",
+            id: "open-Track-rank",
+            name: "Open rank dashboard",
             callback: () => this.activateView()
         });
         this.addCommand({
             id: "capture-rank-snapshot",
-            name: "Capture Rank Snapshot",
+            name: "Capture rank snapshot",
             callback: async () => {
                 const snapshot = buildSnapshot(this.app, this.settings);
                 this.settings.snapshots.push(snapshot);
@@ -1117,72 +1123,32 @@ class ValorantHabitRankPlugin extends obsidian_1.Plugin {
         });
         this.addCommand({
             id: "open-rank-stats",
-            name: "Open Rank Stats",
+            name: "Open rank stats",
             callback: () => {
                 const leaf = this.app.workspace.getRightLeaf(false);
-                leaf?.setViewState({ type: VIEW_TYPE_STATS, active: true });
+                if (leaf) {
+                    void leaf.setViewState({ type: VIEW_TYPE_STATS, active: true });
+                }
             }
         });
         this.addCommand({
             id: "generate-rank-analysis-30d",
-            name: "Generate Rank Analysis (Last 30 Days)",
-            callback: () => generateRankAnalysisNote(this.app, 30)
+            name: "Generate rank analysis (last 30 days)",
+            callback: () => void generateRankAnalysisNote(this.app, 30)
         });
         this.addCommand({
             id: "generate-rank-analysis",
-            name: "Generate Rank Analysis",
+            name: "Generate rank analysis",
             callback: () => {
                 new RangeSelectModal(this.app, (days) => {
-                    generateRankAnalysisNote(this.app, days);
+                    void generateRankAnalysisNote(this.app, days);
                 }).open();
             }
         });
-        this.addSettingTab(new ValorantRankSettingTab(this.app, this));
+        this.addSettingTab(new TrackRankSettingTab(this.app, this));
     }
     async saveSettings() {
         await this.saveData(this.settings);
-    }
-    addStyles() {
-        const styleEl = document.createElement('style');
-        styleEl.id = 'valorant-rank-analysis-styles';
-        styleEl.textContent = `
-      .rank-analysis {
-        width: 100%;
-        border-collapse: collapse;
-        margin: 20px 0;
-      }
-      
-      .rank-analysis th,
-      .rank-analysis td {
-        padding: 12px;
-        text-align: left;
-        border-bottom: 1px solid var(--background-modifier-border);
-      }
-      
-      .rank-analysis th {
-        font-weight: 600;
-        background: var(--background-secondary);
-      }
-      
-      .rank-heatmap {
-        display: flex;
-        gap: 3px;
-        flex-wrap: wrap;
-      }
-      
-      .rank-heatmap > div {
-        width: 12px;
-        height: 12px;
-        border-radius: 2px;
-        background: var(--background-modifier-border);
-      }
-      
-      .rank-heatmap .h1 { background: rgba(34, 197, 94, 0.3); }
-      .rank-heatmap .h2 { background: rgba(34, 197, 94, 0.5); }
-      .rank-heatmap .h3 { background: rgba(34, 197, 94, 0.7); }
-      .rank-heatmap .h4 { background: rgba(34, 197, 94, 1); }
-    `;
-        document.head.appendChild(styleEl);
     }
     async activateView() {
         const { workspace } = this.app;
@@ -1194,7 +1160,7 @@ class ValorantHabitRankPlugin extends obsidian_1.Plugin {
             await rightLeaf.setViewState({ type: VIEW_TYPE_RANK, active: true });
             leaf = rightLeaf;
         }
-        workspace.revealLeaf(leaf);
+        await workspace.revealLeaf(leaf);
     }
     refreshRankView() {
         const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_RANK);
@@ -1204,7 +1170,6 @@ class ValorantHabitRankPlugin extends obsidian_1.Plugin {
         });
     }
     onunload() {
-        document.getElementById('valorant-rank-analysis-styles')?.remove();
     }
 }
-exports.default = ValorantHabitRankPlugin;
+exports.default = TrackHabitRankPlugin;
