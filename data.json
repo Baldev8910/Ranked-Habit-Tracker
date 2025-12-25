@@ -22,7 +22,8 @@
       "field": "AcaResearch",
       "rrPerDay": 1,
       "penaltyPerDay": 2,
-      "enabled": true
+      "enabled": true,
+      "trackingMode": "daily"
     }
   ],
   "rankGraceRR": 20,

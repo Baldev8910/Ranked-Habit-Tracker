@@ -181,11 +181,11 @@ async function generateRankAnalysisNote(app, days) {
         }
     }
     const lines = [];
-    lines.push(`# Rank Analysis — Last ${days} Days`);
+    lines.push(`# Rank analysis — last ${days} days`);
     lines.push(``);
     lines.push(`**Period:** ${start.toISOString().slice(0, 10)} → ${end.toISOString().slice(0, 10)}`);
     lines.push(``);
-    lines.push(`## Per-Activity Summary`);
+    lines.push(`## Per-activity summary`);
     lines.push(`<table class="rank-analysis">`);
     lines.push(`<tr><th>Activity</th><th>Days Done</th><th>Heat</th></tr>`);
     Object.entries(stats).forEach(([name, count]) => {
@@ -207,7 +207,7 @@ async function generateRankAnalysisNote(app, days) {
     });
     lines.push(`</table>`);
     lines.push(``);
-    lines.push(`## Daily Activity Heatmap`);
+    lines.push(`## Daily activity heatmap`);
     lines.push(`<div class="rank-heatmap">`);
     // Sort dates chronologically for better visualization
     const sortedDates = Object.keys(dailyCounts).sort();
@@ -221,11 +221,11 @@ async function generateRankAnalysisNote(app, days) {
     });
     lines.push(`</div>`);
     const content = lines.join("\n");
-    const folder = "Data Analysis";
+    const folder = "Data analysis";
     if (!app.vault.getAbstractFileByPath(folder)) {
         await app.vault.createFolder(folder);
     }
-    const filename = `${folder}/Rank Analysis ${end.toISOString().slice(0, 10)}.md`;
+    const filename = `${folder}/Rank analysis ${end.toISOString().slice(0, 10)}.md`;
     // Check if file exist
     let file = app.vault.getAbstractFileByPath(filename);
     if (file instanceof obsidian_1.TFile) {
@@ -611,7 +611,7 @@ class TrackRankView extends obsidian_1.ItemView {
         return "Track rank";
     }
     async onOpen() {
-        await this.render();
+        this.render();
     }
     render() {
         const content = this.contentEl;
@@ -790,7 +790,7 @@ class TrackRankSettingTab extends obsidian_1.PluginSettingTab {
            DEFAULT ACTIVITIES
         ====================== */
         new obsidian_1.Setting(containerEl)
-            .setName("Track rank settings")
+            .setName("Track rank configuration")
             .setHeading();
         ACTIVITIES.forEach(activity => {
             new obsidian_1.Setting(containerEl)
@@ -872,7 +872,7 @@ class TrackRankSettingTab extends obsidian_1.PluginSettingTab {
                 enabled: true
             });
             await this.plugin.saveSettings();
-            await this.display(); // re-render settings
+            this.display(); // re-render settings
         }));
         this.plugin.settings.customHabits.forEach((habit, index) => {
             const box = containerEl.createDiv({
@@ -974,7 +974,7 @@ class TrackRankSettingTab extends obsidian_1.PluginSettingTab {
             }));
             // RR per day
             new obsidian_1.Setting(box)
-                .setName("RR per day")
+                .setName("RR / day")
                 .addText(t => t
                 .setValue(String(habit.rrPerDay))
                 .onChange(async (v) => {
@@ -1017,7 +1017,7 @@ class TrackRankSettingTab extends obsidian_1.PluginSettingTab {
             }));
             if (habit.trackingMode === 'weekly') {
                 new obsidian_1.Setting(box)
-                    .setName("RR per week")
+                    .setName("RR / week")
                     .addText(t => t
                     .setValue(String(habit.rrPerWeek || 7))
                     .onChange(async (v) => {
@@ -1037,7 +1037,7 @@ class TrackStatsView extends obsidian_1.ItemView {
     getViewType() { return VIEW_TYPE_STATS; }
     getDisplayText() { return "Rank stats"; }
     async onOpen() {
-        await this.render();
+        this.render();
     }
     render() {
         const el = this.contentEl;
