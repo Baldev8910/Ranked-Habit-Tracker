@@ -612,6 +612,7 @@ class TrackRankView extends obsidian_1.ItemView {
     }
     async onOpen() {
         this.render();
+        return Promise.resolve();
     }
     render() {
         const content = this.contentEl;
@@ -1038,6 +1039,7 @@ class TrackStatsView extends obsidian_1.ItemView {
     getDisplayText() { return "Rank stats"; }
     async onOpen() {
         this.render();
+        return Promise.resolve();
     }
     render() {
         const el = this.contentEl;
