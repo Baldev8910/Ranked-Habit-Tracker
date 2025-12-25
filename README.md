@@ -63,7 +63,7 @@ Activity RR = Consecutive Weeks Completed × RR per Week
 
 ## Quick Start
 
-1. Install the plugin and enable it
+1. Install the plugin (the entire repository that includes the "assets") and enable it
 2. Open Settings → Ranked Habit Tracker
 3. Disable all default habits (or keep ones you want)
 4. Click "Add Custom Habit" for each habit you track
@@ -260,7 +260,7 @@ Add unlimited custom habits beyond the default 13:
 
 **From GitHub Releases:**
 
-1. Download the latest release from [Releases](link)
+1. Download the entire repository including the "assets" folder
 2. Extract to `.obsidian/plugins/valorant-habit-rank/`
 3. Restart Obsidian
 4. Enable in Settings → Community Plugins
