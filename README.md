@@ -67,7 +67,7 @@ Activity RR = Consecutive Weeks Completed × RR per Week
 2. Open Settings → Ranked Habit Tracker
 3. Disable all default habits (or keep ones you want)
 4. Click "Add Custom Habit" for each habit you track
-5. Set your keyboard shortcut (recommended: `Alt + V`)
+5. Set your keyboard shortcut for "Open rank dashboard" (recommended: `Alt + V`)
 6. Press your shortcut to view your rank!
 
 ---
@@ -230,7 +230,7 @@ The main dashboard displays:
 
 **Opening the Rank View:**
 
-- Command Palette: "Open Valorant Rank Dashboard"
+- Command Palette: "Open rank dashboard"
 - Appears in right sidebar
 
 ### Custom Habits
@@ -261,7 +261,7 @@ Add unlimited custom habits beyond the default 13:
 **From GitHub Releases:**
 
 1. Download the entire repository including the "assets" folder
-2. Extract to `.obsidian/plugins/valorant-habit-rank/`
+2. Extract to `.obsidian/plugins/ranked-habit-tracker/`
 3. Restart Obsidian
 4. Enable in Settings → Community Plugins
 
@@ -339,7 +339,7 @@ Edit `main.ts` to customize:
 **Grace Period:**
 
 ```typescript
-const DEFAULT_SETTINGS: ValorantRankSettings = {
+const DEFAULT_SETTINGS: TrackRankSettings = {
   rankGraceRR: 30,      // Change from 20
   rankGraceDays: 5,     // Change from 3
   ...
@@ -352,11 +352,11 @@ const DEFAULT_SETTINGS: ValorantRankSettings = {
 
 | Command | Description |
 | --------- | ------------- |
-| Open Valorant Rank Dashboard | Opens main rank view |
-| Capture Rank Snapshot | Saves current state |
-| Open Rank Stats (BETA) | Views snapshot history |
-| Generate Rank Analysis (Last 30 Days) (BETA) | Creates 30-day report |
-| Generate Rank Analysis (BETA) | Creates custom report |
+| Open rank dashboard | Opens main rank view |
+| Capture rank snapshot | Saves current state |
+| Open rank stats (BETA) | Views snapshot history |
+| Generate rank analysis (last 30 days) (BETA) | Creates 30-day report |
+| Generate rank analysis (BETA) | Creates custom report |
 
 ---
 
@@ -440,7 +440,7 @@ Debouncing (300ms) prevents excessive recalculation.
 
 All plugin data is stored in:
 
-- `.obsidian/plugins/valorant-habit-rank/data.json`
+- `.obsidian/plugins/ranked-habit-tracker/data.json`
 
 This includes:
 
