@@ -515,8 +515,8 @@ A: Live RR comes from your current active streaks (can decay with penalties). Hi
 ## Version Information
 
 **Plugin Version:** 2.0  
-**Last Updated:** December 2024  
-**Compatibility:** Obsidian v1.0.0+
+**Last Updated:** December 2025  
+**Compatibility:** Obsidian v1.10.6
 
 **Major Features in v2.0:**
 
