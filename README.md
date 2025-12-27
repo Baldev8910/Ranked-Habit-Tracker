@@ -10,10 +10,13 @@ This plugin can help you build habit for over a long term and keep you competiti
 
 ## How to Use?
 
-![Rank display showing current tier and progress, featuring a rank icon on the left with the tier name displayed alongside a progress bar indicating RR points toward the next rank threshold](assets/preview.png)
-![Settings panel with date 2025-12-23 at top, Properties section listing 13 default habit checkboxes (DJournal, Masturbation Avoidance checked, GTG, Study, Research, Gaming, waterPlants, Medicine, AcaResearch unchecked), and Add property option at bottom](assets/preview_2.png)
+![rank display](assets/preview.png)
+
+Download the entire repository and extract it to `yourVault/.obsidian/plugins/ranked-habit-tracker`. DO NOT download the releases.
 
 You will need to set your habits in the properties in checkbox style. Numerical and alphabetical values will not work. Might add in the next update.
+
+![Properties](assets/preview_2.png)
 
 Disable all the default habits in the settings and add your own. You can name your habit anything. Then, you need to specify the folder your daily notes are stored in. Make sure your notes are saved in `YYYY-MM-DD` format. No other format will work. Add the field (or name of the property) you are tracking. You can customize `RR per Day` and `Penalty per Day` as per your liking. You can also change the `Tracking Mode` from `Daily` to `Weekly`.
 
@@ -22,6 +25,8 @@ You can open and see your rank by pressing a keyboard shortcut that you will hav
 The plugin will open on the right sidebar of the Obsidian window. It will show you the rank your are on and how many RR are required to climb up the next rank.
 
 When you skip a habit for more than 2 days, you will start gaining penalties (as per the value you set in `Penalty per Day`). Your RR count will decrease if you skip the habits for too long and thus your rank will decrease.
+
+![penalty](assets/preview_3.png)
 
 **Grace Period Rules:**
 

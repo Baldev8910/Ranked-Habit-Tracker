@@ -433,7 +433,7 @@ function computeAllActivityRR(app, settings) {
     return {
         totalRR,
         breakdown,
-        penalties: breakdown.filter(b => b.rr < 0)
+        penalties: breakdown.filter(b => b.penaltyDays > 0)
     };
 }
 const RANKS = [
