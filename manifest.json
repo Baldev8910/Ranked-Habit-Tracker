@@ -3,5 +3,6 @@
   "name": "Ranked Habit Tracker",
   "author": "Baldev8910",
   "description": "Track habits using a competitive rank system with RR, decay penalties, and progress analysis.",
-  "repo": "Baldev8910/Ranked-Habit-Tracker"
+  "repo": "Baldev8910/Ranked-Habit-Tracker",
+  "version": "2.0.0"
 }
