@@ -684,7 +684,7 @@ const RANK_TIER_COLORS: Record<string, string> = {
   Diamond: "#60A5FA",
   Ascendant: "#22C55E",
   Immortal: "#EF4444",
-  Radiant: "#fffed1ff"
+  Radiant: "#ffffb5"
 };
 
 const RANK_ICONS: Record<string, string> = {
