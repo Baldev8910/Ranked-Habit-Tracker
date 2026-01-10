@@ -469,12 +469,12 @@ const RANK_TIER_COLORS = {
     Iron: "#6B7280",
     Bronze: "#CD7F32",
     Silver: "#9CA3AF",
-    Gold: "#F59E0B",
+    Gold: "#fbff00ff",
     Platinum: "#22D3EE",
     Diamond: "#60A5FA",
     Ascendant: "#22C55E",
     Immortal: "#EF4444",
-    Radiant: "#F472B6"
+    Radiant: "#ffffb5"
 };
 const RANK_ICONS = {
     "Unranked": "Unranked",

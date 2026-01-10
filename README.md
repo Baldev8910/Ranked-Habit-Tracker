@@ -2,6 +2,8 @@
 
 > **Note:** Some features like Rank Analysis Reports are currently in beta testing and may not function correctly. Stick to the main rank tracking features for stable functionality.
 
+> **Common Issue:** When you download the ZIP file, it is named as "Ranked-Habit-Tracker-main". This stops the plugin from displaying the icons in the sidebar. You can simply fix it by renaming the folder to "ranked-habit-tracker" and then restarting Obsidian.
+
 Ranked Habit Tracker is a plugin that tracks and ranks you based on your habits. This plugin contains RR (Rank Rating) that manages and decides your rank. The ranks take inspiration from Valorant.
 
 This plugin can help you build habit for over a long term and keep you competitive. The gamified style can help you push yourself to the edge.
@@ -69,11 +71,12 @@ Activity RR = Consecutive Weeks Completed × RR per Week
 ## Quick Start
 
 1. Install the plugin (the entire repository that includes the "assets") and enable it
-2. Open Settings → Ranked Habit Tracker
-3. Disable all default habits (or keep ones you want)
-4. Click "Add Custom Habit" for each habit you track
-5. Set your keyboard shortcut for "Open rank dashboard" (recommended: `Alt + V`)
-6. Press your shortcut to view your rank!
+2. When you download the ZIP file, it is named as "Ranked-Habit-Tracker-main". This stops the plugin from displaying the icons in the sidebar. You can simply fix it by renaming the folder to "ranked-habit-tracker" and then restarting Obsidian.
+3. Open Settings → Ranked Habit Tracker
+4. Disable all default habits (or keep ones you want)
+5. Click "Add Custom Habit" for each habit you track
+6. Set your keyboard shortcut for "Open rank dashboard" (recommended: `Alt + V`)
+7. Press your shortcut to view your rank!
 
 ---
 
